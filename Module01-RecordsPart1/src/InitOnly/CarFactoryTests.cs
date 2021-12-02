@@ -24,23 +24,19 @@ namespace InitOnly
 
     class CarFactory
     {
-        public static ICar CreateCar<TCar>(string name, int horsePower) where TCar : ICar
-        {
-            var car = new TCar();
-            car.Name = name;
-            car.HorsePower = horsePower;
-            return car;
-        }
+        public static ICar CreateCar<TCar>(string name, int horsePower) where TCar : ICar, new() => new TCar() {Name = name, HorsePower = horsePower};
     }
 
-    class Toyota
+    record Toyota : ICar
     {
+        public string Name { get; init; }
+        public int HorsePower { get; init; }
     }
 
     interface ICar
     {
-        string Name { get; set; }
+        string Name { get; init; }
 
-        int HorsePower { get; set; }
+        int HorsePower { get; init; }
     }
 }
