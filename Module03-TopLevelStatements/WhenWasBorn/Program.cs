@@ -2,17 +2,13 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 
-// TODO: As a top-level statements exercise, use only this single file to define everything!
-
 if (args.Length != 1)
 {
-    // TODO: define local PrintHelp function to print help and exit
+    return PrintHelp();
 }
 
-// TODO: utilize https://swapi.dev/ to search for a person with a given name
-//       Hint: Use https://swapi.dev/documentation and look for "Searching"
 using HttpClient client = new HttpClient();
-var requestUri = "?";
+var requestUri = $"https://swapi.dev/api/people/?search={args[0]}";
 var response = await client.GetFromJsonAsync<PersonsDTO>(requestUri);
 
 if (response?.Count != 1)
@@ -21,10 +17,18 @@ if (response?.Count != 1)
 }
 else
 {
-    // TODO: 
-    Console.WriteLine($"{person.Name} was born {person.Birth_Year}.");
+    foreach (var person in response.results)
+    {
+        Console.WriteLine($"Name: {person.Name}, Height: {person.Height}, Mass: {person.Mass}, Hair Color: {person.Hair_Color}, Skin Color: {person.Skin_Color}, Eye Color: {person.Eye_Color}");
+    }
+}
+return 1;
+int PrintHelp()
+{
+    Console.WriteLine("Print Name of Star Wars Hero as argument");
+    return 1;
 }
 
-// TODO: define PersonDTO and PersonsDTO records to deserialize (only necessary)
-//       fields from https://swapi.dev/api/people/?search=... results.
+record PersonDTO(string Name, string Height, string Mass, string Hair_Color, string Skin_Color, string Eye_Color);
 
+record PersonsDTO(int Count, string Next, string Previous, PersonDTO[] results);
