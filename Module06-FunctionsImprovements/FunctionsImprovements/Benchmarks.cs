@@ -30,13 +30,14 @@ namespace FunctionsImprovements
         [ArgumentsSource(nameof(Values))]
         public int Static_WithoutClosure(int value)
         {
+            static bool IsMatch(int i, int state) => i % state == 0;
             // TODO: change the code below, so that the static lambda is used.
             // Notice that there's an overload for Find that allows passing the state.
             // Watch benchmarks for memory allocations.
-            return collection.Find(i => i % value == 0) +
-                   collection.Find(i => i % value == 0) +
-                   collection.Find(i => i % value == 0) +
-                   collection.Find(i => i % value == 0);
+            return collection.Find(value, IsMatch) +
+                   collection.Find(value, IsMatch) +
+                   collection.Find(value, IsMatch) +
+                   collection.Find(value, IsMatch);
         }
 
         public IEnumerable<int> Values()
